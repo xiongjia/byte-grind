@@ -1,2 +1,10 @@
 # byte-grind
-my test code
+
+
+This repository is created for programming exercises & prototypes.
+
+---
+
+- wheat : golang test code &  prototypes
+
+

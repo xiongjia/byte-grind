@@ -1,0 +1,26 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  PROJECT: Wheat
+  GO: go
+
+tasks:
+  default:
+    deps: [wheat]
+
+  wheat:
+    silent: false
+    sources:
+      - ./cmd/wheat/**/*
+      - ./Taskfile.yml
+    generates:
+      - ./wheat.exe
+    cmds:
+     - "{{.GO}} vet ./cmd/wheat/main.go"
+     - "{{.GO}} build -o wheat.exe ./cmd/wheat/main.go"
+
+  buildDbg:
+    cmds:
+     - echo "OS = {{OS}}"
