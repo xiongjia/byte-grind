@@ -5,6 +5,6 @@ This repository is created for programming exercises & prototypes.
 
 ---
 
-- wheat : golang test code &  prototypes
-
+- `wheat` : golang test code & prototypes
+- `oat`: java test code & prototypes
 
