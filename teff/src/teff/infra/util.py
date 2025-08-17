@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """
 Filename: util.py
-Description: test pytest 
+Description: test pytest
 """
 
 def add_one(number):
-    return number + 1
+  return number + 1
 
 
