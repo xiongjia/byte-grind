@@ -12,4 +12,5 @@
 
   <artifactId>oat-infra</artifactId>
   <name>Oat Infra</name>
+	<description>Infra</description>
 </project>

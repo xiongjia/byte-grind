@@ -7,15 +7,24 @@
     <junit.version>5.13.4</junit.version>
   </properties>
 
+  <parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.4</version>
+		<relativePath/> 
+	</parent>
+
   <groupId>bytegrind.oat</groupId>
   <artifactId>oat</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>ByteGrind oat</name>
+  <description>root project</description>
 
   <modules>
     <module>oat-infra</module>
     <module>oat-cli</module>
+    <module>oat-api</module>
   </modules>
 
   <dependencyManagement>

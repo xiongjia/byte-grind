@@ -1,0 +1,10 @@
+# server settings
+server.port: 8082
+
+spring.profiles:
+  active: dev
+
+---
+
+spring.profiles:
+  active: prod
