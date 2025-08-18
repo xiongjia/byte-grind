@@ -12,6 +12,7 @@
 
   <artifactId>oat-cli</artifactId>
   <name>Oat commandline</name>
+  <description>Command line tools</description>
 
   <dependencies>
     <dependency>
