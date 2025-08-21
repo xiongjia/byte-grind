@@ -21,20 +21,14 @@ if (MSVC)
   set(CMAKE_CXX_STANDARD_LIBRARIES "")
 endif()
 
-if (APPLE)
-  # Enable C++ 11 on OS X
-  add_definitions(-std=c++17 -stdlib=libc++)
-endif()
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("${PROJECT_SOURCE_DIR}/src")
+# enable boost static flag
+find_package(Boost 1.88.0 REQUIRED COMPONENTS unit_test_framework)
 
-add_library(libbarley STATIC
-  "${PROJECT_SOURCE_DIR}/src/barley_util.cxx"
-  "${PROJECT_SOURCE_DIR}/src/barley_util.hxx")
-
-# add_executable(chentest
-#   "${PROJECT_SOURCE_DIR}/test/chen_test_log.cxx"
-#   "${PROJECT_SOURCE_DIR}/test/chen_test.cxx")
+include_directories("${Boost_INCLUDE_DIRS}"
+  "${PROJECT_SOURCE_DIR}/src")
 
 file(GLOB SOURCES_GROUP_MISC
   "src/barley_util.*")
@@ -45,9 +39,21 @@ file(GLOB SOURCES_GROUP_CFG
 source_group("misc" FILES ${SOURCES_GROUP_MISC})
 source_group("conf" FILES ${SOURCES_GROUP_CONF})
 
+add_library(libbarley STATIC
+  "${PROJECT_SOURCE_DIR}/src/barley_util.cxx"
+  "${PROJECT_SOURCE_DIR}/src/barley_util.hxx")
+
 add_executable(barley
   ".editorconfig"
   "${PROJECT_SOURCE_DIR}/src/main.cxx")
 
-target_link_libraries(barley libbarley)
+add_executable(barleytest
+  "${PROJECT_SOURCE_DIR}/test/barley_test_util.cxx"
+  "${PROJECT_SOURCE_DIR}/test/barley_test.cxx")
+
+target_link_libraries(barley libbarley
+  Boost::unit_test_framework)
+
+target_link_libraries(barleytest libbarley
+  Boost::unit_test_framework)
 
