@@ -5,7 +5,7 @@ description = ""
 authors = [{ name = "xiongjia", email = "lexiongjia@gmail.com" }]
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = ["flask (>=3.1.2,<4.0.0)"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

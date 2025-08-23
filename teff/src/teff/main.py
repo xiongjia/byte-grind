@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Filename: main.py
-Description: test pytest
 """
 
 from teff.infra.util import add_one
