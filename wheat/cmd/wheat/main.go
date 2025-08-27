@@ -7,6 +7,9 @@ import (
 )
 
 func main() {
-	slog.SetDefault(util.NewLogger(util.LogOption{Level: util.LOG_LEVEL_DEBUG}))
+	slog.SetDefault(util.NewLogger(
+		util.LoggerWithLevel(util.LOG_LEVEL_DEBUG),
+		util.LoggerWithSource(true),
+	))
 	slog.Debug("test", slog.String("test", "t"))
 }
