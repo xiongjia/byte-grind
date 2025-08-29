@@ -21,10 +21,13 @@ type (
 
 		// LogFilename is the file to write logs to.
 		// If the LogFilename is empty the logger handler will skip the FS log writer.
-		logFilename            string
-		logFileRotateMaxSizeMB int
-		logFileRotateMaxBackup int
-		logFileRtateCompress   bool
+		filename            string
+		fileRotateMaxSizeMB int
+		fileRotateMaxBackup int
+		fileRotateCompress  bool
+
+		// customer's logger writer
+		logWriter io.Writer
 	}
 
 	nullWriter struct{}
@@ -44,21 +47,23 @@ const (
 
 func NewLogger(opts ...LogOption) *slog.Logger {
 	logOpts := logOption{
-		level:                  slog.LevelInfo,
-		addSource:              false,
-		disableStdout:          false,
-		logFilename:            "",
-		logFileRotateMaxSizeMB: logFileRotateDefaultSizeMB,
-		logFileRotateMaxBackup: logFileRotateDefaultBackup,
-		logFileRtateCompress:   false,
+		level:               slog.LevelInfo,
+		addSource:           false,
+		disableStdout:       false,
+		filename:            "",
+		fileRotateMaxSizeMB: logFileRotateDefaultSizeMB,
+		fileRotateMaxBackup: logFileRotateDefaultBackup,
+		fileRotateCompress:  false,
+		logWriter:           nil,
 	}
 	for _, opt := range opts {
 		opt(&logOpts)
 	}
-
 	logWriter := makeLogWriter(logOpts)
-	handler := slog.NewJSONHandler(logWriter,
-		&slog.HandlerOptions{Level: logOpts.level, AddSource: logOpts.addSource})
+	handler := slog.NewJSONHandler(logWriter, &slog.HandlerOptions{
+		Level:     logOpts.level,
+		AddSource: logOpts.addSource,
+	})
 	return slog.New(handler)
 }
 
@@ -69,6 +74,18 @@ func (nullWriter) Write(p []byte) (n int, err error) {
 func LoggerWithSource(addSource bool) LogOption {
 	return func(opt *logOption) {
 		opt.addSource = addSource
+	}
+}
+
+func LoggerWithWriter(logWriter io.Writer) LogOption {
+	return func(opt *logOption) {
+		opt.logWriter = logWriter
+	}
+}
+
+func LoggerWithStdout(disableStdout bool) LogOption {
+	return func(opt *logOption) {
+		opt.disableStdout = disableStdout
 	}
 }
 
@@ -89,24 +106,40 @@ func LoggerWithLevel(levelStr string) LogOption {
 	}
 }
 
-func makeLogWriter(opts logOption) io.Writer {
-	logFilename := strings.TrimSpace(opts.logFilename)
-	if logFilename == "" && opts.disableStdout {
+func LoggerWithFile(
+	filename string,
+	rotateMaxSizeMB int,
+	rotateMaxBackup int,
+	rotateCompress bool,
+) LogOption {
+	return func(opt *logOption) {
+		opt.filename = filename
+		opt.fileRotateMaxSizeMB = max(rotateMaxSizeMB, logFileRotateMinSizeMB)
+		opt.fileRotateMaxBackup = max(rotateMaxBackup, logFileRotateMinBackup)
+		opt.fileRotateCompress = rotateCompress
+	}
+}
+
+func makeLogWriter(opt logOption) io.Writer {
+	logFilename := strings.TrimSpace(opt.filename)
+	if logFilename == "" && opt.disableStdout {
 		return &nullWriter{}
 	}
-
-	writers := make([]io.Writer, 0, 2)
-	if !opts.disableStdout {
+	writers := make([]io.Writer, 0, 3)
+	if !opt.disableStdout {
 		writers = append(writers, os.Stdout)
 	}
 	if logFilename != "" {
 		writers = append(writers, &lumberjack.Logger{
 			Filename:   logFilename,
-			MaxSize:    opts.logFileRotateMaxSizeMB,
-			MaxBackups: opts.logFileRotateMaxBackup,
+			MaxSize:    opt.fileRotateMaxSizeMB,
+			MaxBackups: opt.fileRotateMaxBackup,
 			MaxAge:     0,
-			Compress:   opts.logFileRtateCompress,
+			Compress:   opt.fileRotateCompress,
 		})
+	}
+	if opt.logWriter != nil {
+		writers = append(writers, opt.logWriter)
 	}
 	return io.MultiWriter(writers...)
 }
