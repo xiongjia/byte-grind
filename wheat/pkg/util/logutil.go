@@ -45,6 +45,10 @@ const (
 	logFileRotateDefaultBackup = 5
 )
 
+func SetDefaultSlog(opts ...LogOption) {
+	slog.SetDefault(NewLogger(opts...))
+}
+
 func NewLogger(opts ...LogOption) *slog.Logger {
 	logOpts := logOption{
 		level:               slog.LevelInfo,
