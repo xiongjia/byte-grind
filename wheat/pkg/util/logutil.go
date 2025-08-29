@@ -122,7 +122,7 @@ func LoggerWithFile(
 
 func makeLogWriter(opt logOption) io.Writer {
 	logFilename := strings.TrimSpace(opt.filename)
-	if logFilename == "" && opt.disableStdout {
+	if logFilename == "" && opt.disableStdout && opt.logWriter != nil {
 		return &nullWriter{}
 	}
 	writers := make([]io.Writer, 0, 3)
