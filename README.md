@@ -9,3 +9,5 @@ This repository is created for programming exercises & prototypes.
 - `oat`: java test code & prototypes
 - `teff`: python test code & protypes
 - `barley`: c/c++ test code
+- `corn`: Qt library test code
+
