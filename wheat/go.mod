@@ -7,6 +7,7 @@ require (
 	github.com/dgraph-io/badger/v4 v4.8.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/stretchr/testify v1.10.0
+	go.uber.org/fx v1.24.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
@@ -46,6 +47,9 @@ require (
 	go.opentelemetry.io/otel v1.37.0 // indirect
 	go.opentelemetry.io/otel/metric v1.37.0 // indirect
 	go.opentelemetry.io/otel/trace v1.37.0 // indirect
+	go.uber.org/dig v1.19.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
+	go.uber.org/zap v1.26.0 // indirect
 	golang.org/x/arch v0.8.0 // indirect
 	golang.org/x/crypto v0.39.0 // indirect
 	golang.org/x/net v0.41.0 // indirect
