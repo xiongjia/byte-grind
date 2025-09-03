@@ -6,6 +6,7 @@ require (
 	github.com/apenella/go-ansible/v2 v2.2.0
 	github.com/dgraph-io/badger/v4 v4.8.0
 	github.com/gin-gonic/gin v1.10.1
+	github.com/samber/do v1.6.0
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/fx v1.24.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
