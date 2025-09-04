@@ -50,4 +50,14 @@ func SamberDo() {
 
 	car := do.MustInvoke[*CarService](injector)
 	car.SvcInvoke()
+
+	err := do.HealthCheck[*CarService](injector)
+	if err != nil {
+		return
+	}
+
+	err = do.HealthCheck[Service1](injector)
+	if err != nil {
+		return
+	}
 }
