@@ -1,0 +1,14 @@
+{
+  "name": "millet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.15.1",
+  "scripts": {
+    "dev": "pnpm --filter mint dev",
+    "build": "pnpm --filter mint build"
+  }
+}
