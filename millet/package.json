@@ -9,7 +9,9 @@
   "packageManager": "pnpm@10.15.1",
   "scripts": {
     "devMint": "pnpm --filter mint dev",
-    "build": "pnpm --filter mint build"
+    "devComponent": "pnpm --filter component storybook",
+    "build": "pnpm --filter mint build",
+    "fmt": "pnpm biome format --write ."
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.3"
