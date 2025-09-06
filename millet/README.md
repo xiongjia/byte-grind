@@ -1,9 +1,35 @@
-# byte-grind/wheat
+# byte-grind/millet
 
-golang test code and prototypes
+Frontend UI test project 
 
 
-## Build
-1. install go-task : go install github.com/go-task/task/v3/cmd/task@latest
-2. build the prototypes via execute the task:  `task`
+1. VS Code setting ( {$millet}/.vscode/settings.json )
 
+```json
+{
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports.biome": "explicit",
+    "source.fixAll.biome": "explicit"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  }
+}
+```

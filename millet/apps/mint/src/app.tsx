@@ -1,5 +1,4 @@
-import React from "react";
-import { Button } from "@millet/component";
+import { Button } from '@millet/component'
 
 export default function App() {
   return (

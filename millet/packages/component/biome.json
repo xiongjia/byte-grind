@@ -1,0 +1,10 @@
+{
+  "extends": "//",
+  "linter": {
+    "rules": {
+      "a11y": {
+        "useButtonType": "off"
+      }
+    }
+  }
+}
