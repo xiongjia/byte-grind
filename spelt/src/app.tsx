@@ -1,18 +1,11 @@
-import { cx } from 'class-variance-authority'
-import { Button, buttonVariants } from '@/components/button'
+import { ThemeProvider } from '@/components/theme-provider'
+import { Home } from './home'
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button
-        className={cx(
-          buttonVariants({ variant: 'destructive', size: 'sm' }),
-          'hover:underline',
-        )}
-      >
-        Click me
-      </Button>
-    </div>
+    <ThemeProvider defaultTheme="light">
+      <Home />
+    </ThemeProvider>
   )
 }
 
