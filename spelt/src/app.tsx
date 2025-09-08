@@ -1,10 +1,19 @@
-import { ThemeProvider } from '@/components/theme-provider'
-import { Home } from './home'
+import { ThemeProvider } from '@/context/theme-provider'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { routeTree } from './routeTree.gen'
+
+const router = createRouter({ routeTree })
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light">
-      <Home />
+      <RouterProvider router={router} />
     </ThemeProvider>
   )
 }

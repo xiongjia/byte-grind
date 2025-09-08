@@ -1,10 +1,9 @@
 import { cx } from 'class-variance-authority'
-import { Button, buttonVariants } from '@/components/button'
-import { useTheme } from '@/components/theme-provider'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { useTheme } from '@/context/theme-provider'
 
 const Home = () => {
   const { theme, setTheme } = useTheme()
-
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
       <Button
