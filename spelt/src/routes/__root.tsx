@@ -3,6 +3,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { AppSidebar } from '@/components/layouts/app-sidebar'
 import { Header } from '@/components/layouts/header'
+import { ThemeSwitch } from '@/components/layouts/theme-switch'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
 
@@ -24,7 +25,12 @@ const RootLayout = () => (
           'peer-data-[variant=inset]:has-[[data-layout=fixed]]:h-[calc(100svh-(var(--spacing)*4))]',
         )}
       >
-        <Header>Test2</Header>
+        <Header>
+          Test2
+          <div className="ms-auto flex items-center space-x-4">
+            <ThemeSwitch />
+          </div>
+        </Header>
         <Outlet />
       </SidebarInset>
     </SidebarProvider>
