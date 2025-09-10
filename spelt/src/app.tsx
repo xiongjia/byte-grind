@@ -4,6 +4,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { ThemeProvider } from '@/context/theme-provider'
 import { routeTree } from './routeTree.gen'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
 const resources = {
   en: {
@@ -11,7 +12,7 @@ const resources = {
       'Welcome to React': 'Welcome to React',
     },
   },
-  cn: {
+  'zh-CN': {
     translation: {
       'Welcome to React': '你好 React',
     },
@@ -19,8 +20,17 @@ const resources = {
 }
 
 i18n
+  .use(LanguageDetector)
   .use(initReactI18next)
-  .init({ resources, lng: 'en', interpolation: { escapeValue: false } })
+  .init({
+    resources,
+    fallbackLng: 'en',
+    interpolation: { escapeValue: false },
+    detection: {
+      order: ['querystring', 'navigator', 'localStorage'],
+      lookupQuerystring: 'lang',
+    },
+  })
 
 const router = createRouter({ routeTree })
 const queryClient = new QueryClient()

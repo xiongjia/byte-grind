@@ -27,10 +27,10 @@ const Home = () => {
         <Button
           onClick={() => {
             console.log('lang ', i18n.language)
-            if (i18n.language === 'cn') {
+            if (i18n.language === 'zh-CN') {
               i18n.changeLanguage('en')
             } else {
-              i18n.changeLanguage('cn')
+              i18n.changeLanguage('zh-CN')
             }
           }}
         >
