@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react-vite'
 import '../src/index.css'
 import { withThemeByClassName } from '@storybook/addon-themes'
+import { withI18next } from './i18n-decorator'
 
 const preview: Preview = {
   parameters: {
@@ -26,7 +27,23 @@ const preview: Preview = {
       defaultTheme: 'light',
       parentSelector: 'html',
     }),
+    withI18next,
   ],
+}
+
+export const globalTypes = {
+  locale: {
+    name: 'Locale',
+    description: 'Internationalization locale',
+    toolbar: {
+      icon: 'globe',
+      items: [
+        { value: 'en', title: 'English' },
+        { value: 'zh-CN', title: '中文简体' },
+      ],
+      showName: true,
+    },
+  },
 }
 
 export default preview

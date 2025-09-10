@@ -1,4 +1,5 @@
 import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import {
   Sidebar,
   SidebarContent,
@@ -10,36 +11,37 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-// Menu items.
-const items = [
-  {
-    title: 'Home',
-    url: '#',
-    icon: Home,
-  },
-  {
-    title: 'Inbox',
-    url: '#',
-    icon: Inbox,
-  },
-  {
-    title: 'Calendar',
-    url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
-  },
-]
-
 export function AppSidebar() {
+  const { t } = useTranslation()
+  // Menu items.
+  const items = [
+    {
+      title: 'Home',
+      url: '#',
+      icon: Home,
+    },
+    {
+      title: 'Inbox',
+      url: '#',
+      icon: Inbox,
+    },
+    {
+      title: 'Calendar',
+      url: '#',
+      icon: Calendar,
+    },
+    {
+      title: 'Search',
+      url: '#',
+      icon: Search,
+    },
+    {
+      title: t('Settings'),
+      url: '#',
+      icon: Settings,
+    },
+  ]
+
   return (
     <Sidebar>
       <SidebarContent>
