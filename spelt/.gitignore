@@ -28,3 +28,6 @@ dist-ssr
 routeTree.gen.ts
 .tanstack
 
+
+*storybook.log
+storybook-static
