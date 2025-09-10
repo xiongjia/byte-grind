@@ -15,13 +15,6 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: { children: 'Click me', variant: 'default', size: 'default' },
-  decorators: [
-    (Story) => (
-      <>
-        <Story />
-      </>
-    ),
-  ],
 }
 
 export const Secondary: Story = {

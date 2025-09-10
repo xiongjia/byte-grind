@@ -13,14 +13,13 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
-  tags: ['autodocs'],
 } satisfies Meta<typeof SidebarTrigger>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: {},
+  args: {children: "Sidebar Trigger"},
   decorators: [
     (Story) => (
       <SidebarProvider defaultOpen={false}>
