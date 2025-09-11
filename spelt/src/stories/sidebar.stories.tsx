@@ -1,15 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { AppSidebar } from '@/components/layouts/app-sidebar'
+import { Header } from '@/components/layouts/header'
 import {
   SidebarInset,
   SidebarProvider,
-  SidebarTrigger,
+  type SidebarTrigger,
 } from '@/components/ui/sidebar'
 import { cn } from '@/lib/utils'
 
+const SideBarButton = () => <Header>Toggle Sidebar</Header>
+
 const meta = {
   title: 'app/sidebar',
-  component: SidebarTrigger,
+  component: SideBarButton,
   parameters: {
     layout: 'centered',
   },
@@ -19,10 +22,10 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  args: {children: "Sidebar Trigger"},
+  args: { children: 'Sidebar Trigger' },
   decorators: [
     (Story) => (
-      <SidebarProvider defaultOpen={false}>
+      <SidebarProvider defaultOpen={true}>
         <AppSidebar />
         <SidebarInset
           className={cn(
