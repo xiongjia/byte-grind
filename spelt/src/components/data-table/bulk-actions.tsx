@@ -58,7 +58,7 @@ export function DataTableBulkActions<TData>({
     if (!buttons) return
 
     const currentIndex = Array.from(buttons).findIndex(
-      (button) => button === document.activeElement
+      (button) => button === document.activeElement,
     )
 
     switch (event.key) {
@@ -123,25 +123,25 @@ export function DataTableBulkActions<TData>({
     <>
       {/* Live region for screen reader announcements */}
       <div
-        aria-live='polite'
-        aria-atomic='true'
-        className='sr-only'
-        role='status'
+        aria-live="polite"
+        aria-atomic="true"
+        className="sr-only"
+        role="status"
       >
         {announcement}
       </div>
 
       <div
         ref={toolbarRef}
-        role='toolbar'
+        role="toolbar"
         aria-label={`Bulk actions for ${selectedCount} selected ${entityName}${selectedCount > 1 ? 's' : ''}`}
-        aria-describedby='bulk-actions-description'
+        aria-describedby="bulk-actions-description"
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className={cn(
           'fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl',
           'transition-all delay-100 duration-300 ease-out hover:scale-105',
-          'focus-visible:ring-ring/50 focus-visible:ring-2 focus-visible:outline-none'
+          'focus-visible:ring-ring/50 focus-visible:ring-2 focus-visible:outline-none',
         )}
       >
         <div
@@ -149,21 +149,21 @@ export function DataTableBulkActions<TData>({
             'p-2 shadow-xl',
             'rounded-xl border',
             'bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur-lg',
-            'flex items-center gap-x-2'
+            'flex items-center gap-x-2',
           )}
         >
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
-                variant='outline'
-                size='icon'
+                variant="outline"
+                size="icon"
                 onClick={handleClearSelection}
-                className='size-6 rounded-full'
-                aria-label='Clear selection'
-                title='Clear selection (Escape)'
+                className="size-6 rounded-full"
+                aria-label="Clear selection"
+                title="Clear selection (Escape)"
               >
                 <X />
-                <span className='sr-only'>Clear selection</span>
+                <span className="sr-only">Clear selection</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent>
@@ -172,23 +172,23 @@ export function DataTableBulkActions<TData>({
           </Tooltip>
 
           <Separator
-            className='h-5'
-            orientation='vertical'
-            aria-hidden='true'
+            className="h-5"
+            orientation="vertical"
+            aria-hidden="true"
           />
 
           <div
-            className='flex items-center gap-x-1 text-sm'
-            id='bulk-actions-description'
+            className="flex items-center gap-x-1 text-sm"
+            id="bulk-actions-description"
           >
             <Badge
-              variant='default'
-              className='min-w-8 rounded-lg'
+              variant="default"
+              className="min-w-8 rounded-lg"
               aria-label={`${selectedCount} selected`}
             >
               {selectedCount}
             </Badge>{' '}
-            <span className='hidden sm:inline'>
+            <span className="hidden sm:inline">
               {entityName}
               {selectedCount > 1 ? 's' : ''}
             </span>{' '}
@@ -196,9 +196,9 @@ export function DataTableBulkActions<TData>({
           </div>
 
           <Separator
-            className='h-5'
-            orientation='vertical'
-            aria-hidden='true'
+            className="h-5"
+            orientation="vertical"
+            aria-hidden="true"
           />
 
           {children}

@@ -1,14 +1,13 @@
-import { useTranslation } from 'react-i18next'
+// import { useTranslation } from 'react-i18next'
 import { Main } from '@/components/layouts/main'
 import { Overview } from '@/components/layouts/overview'
-import { UsersTable } from '@/components/layouts/users'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useTheme } from '@/context/theme-provider'
+// import { useTheme } from '@/context/theme-provider'
+import { Users } from '@/components/layouts/users/users'
 
 const Home = () => {
-  const { theme, setTheme } = useTheme()
-  const { t, i18n } = useTranslation()
+  // const { theme, setTheme } = useTheme()
+  // const { t, i18n } = useTranslation()
 
   return (
     <Main>
@@ -23,8 +22,9 @@ const Home = () => {
         </Card>
       </div>
 
-      <UsersTable />
+      <Users />
 
+      {/*
       <div className="flex min-h-svh flex-col items-center justify-center">
         <h1>{t('Welcome to React')}</h1>
         <Button
@@ -55,7 +55,7 @@ const Home = () => {
         >
           Click me
         </Button>
-      </div>
+      </div> */}
     </Main>
   )
 }
