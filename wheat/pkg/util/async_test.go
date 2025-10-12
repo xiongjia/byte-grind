@@ -22,4 +22,19 @@ func TestRange(t *testing.T) {
 		t.Logf("Consumer: %d\n", v)
 	}
 	t.Logf("test finished\n")
+
+	dataChan2 := make(chan int)
+	go func() {
+		dataChan2 <- 1
+		close(dataChan2)
+	}()
+
+	r, ok := <-dataChan2
+	if ok {
+		fmt.Printf("r1 =  %d\n", r)
+	}
+	r, ok = <-dataChan2
+	if ok {
+		fmt.Printf("r2 =  %d\n", r)
+	}
 }
