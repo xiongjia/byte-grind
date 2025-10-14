@@ -7,13 +7,14 @@ require (
 	github.com/dgraph-io/badger/v4 v4.8.0
 	github.com/gin-gonic/gin v1.10.1
 	github.com/samber/do v1.6.0
+	github.com/sony/sonyflake v1.3.0
 	github.com/stretchr/testify v1.10.0
+	go.etcd.io/etcd/client/pkg/v3 v3.6.5
 	go.etcd.io/etcd/client/v3 v3.6.5
 	go.etcd.io/etcd/server/v3 v3.6.5
 	go.etcd.io/raft/v3 v3.6.0
 	go.uber.org/fx v1.24.0
 	go.uber.org/zap v1.27.0
-	go.uber.org/zap/exp v0.3.0
 	google.golang.org/protobuf v1.36.6
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
@@ -63,7 +64,6 @@ require (
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2 // indirect
 	go.etcd.io/etcd/api/v3 v3.6.5 // indirect
-	go.etcd.io/etcd/client/pkg/v3 v3.6.5 // indirect
 	go.etcd.io/etcd/pkg/v3 v3.6.5 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/otel v1.37.0 // indirect
