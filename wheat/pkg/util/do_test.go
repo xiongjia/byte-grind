@@ -21,3 +21,13 @@ func TestAddWg(t *testing.T) {
 
 	time.Sleep(1000 * 10)
 }
+
+func TestConcurrentQuery(t *testing.T) {
+	c := NewConcurrentQuery()
+
+	result := c.Query([]string{"a", "b", "c"})
+	for k, v := range result {
+		fmt.Printf("k = %s, v = %s\n", k, v)
+		t.Logf("k = %s, v = %s\n", k, v)
+	}
+}

@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/samber/do"
 )
@@ -15,6 +16,9 @@ type (
 
 	CarService struct {
 		Engine Service1
+	}
+
+	ConcurrentQuery struct {
 	}
 )
 
@@ -60,4 +64,24 @@ func SamberDo() {
 	if err != nil {
 		return
 	}
+}
+
+func NewConcurrentQuery() *ConcurrentQuery {
+	return &ConcurrentQuery{}
+}
+
+func (c *ConcurrentQuery) Query(dataId []string) map[string]string {
+	var wg sync.WaitGroup
+	var mtx sync.Mutex
+	results := make(map[string]string)
+	for _, id := range dataId {
+		wg.Go(func() {
+			fmt.Printf("Querying data for ID: %s\n", id)
+			mtx.Lock()
+			defer mtx.Unlock()
+			results[id] = "Data for " + id
+		})
+	}
+	wg.Wait()
+	return results
 }
