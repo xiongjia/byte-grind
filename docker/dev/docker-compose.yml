@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  postgres-18:
+    image: postgres:18-alpine
+    container_name: pg18-local
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: devdb
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./volumes/pg:/var/lib/postgresql/data
+    networks:
+      - pg-network
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dev -d devdb -h localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pg18-data:
+    driver: local
+
+networks:
+  pg-network:
+    driver: bridge
+
