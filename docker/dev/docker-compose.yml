@@ -24,3 +24,25 @@ services:
       timeout: 5s
       retries: 5
 
+  verdaccio:
+    image: verdaccio/verdaccio:5.24.1
+    container_name: verdaccio
+    restart: always 
+    ports:
+      - "4873:4873"
+    volumes:
+      - ./volumes/verdaccio/storage:/verdaccio/storage
+      - ./volumes/verdaccio/plugins:/verdaccio/plugins
+      - ./verdaccio/conf:/verdaccio/conf
+    environment:
+      - VERDACCIO_PORT=4873
+      - NODE_ENV=production
+      - NODE_OPTIONS=--max-old-space-size=2048
+    networks:
+      - verdaccio-network
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G

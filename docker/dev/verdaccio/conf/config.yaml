@@ -1,0 +1,32 @@
+storage: /verdaccio/storage
+plugins: /verdaccio/plugins
+web:
+  title: Local NPM Registry
+
+uplinks:
+  npm_cn:
+    url: https://registry.npmmirror.com/
+    timeout: 900s
+  npm_offical:
+    url: https://registry.npmjs.org/
+
+logs:
+  - { type: stdout, format: pretty, level: http }
+
+packages:
+  '@*/*':
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npm_cn
+  '**':
+    access: $all
+    publish: $all
+    unpublish: $all
+    proxy: npm_cn
+    allow_overwrite: true
+
+middlewares:
+  audit:
+    enabled: false
+
