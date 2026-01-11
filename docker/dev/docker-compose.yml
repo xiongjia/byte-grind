@@ -38,8 +38,6 @@ services:
       - VERDACCIO_PORT=4873
       - NODE_ENV=production
       - NODE_OPTIONS=--max-old-space-size=2048
-    networks:
-      - verdaccio-network
     deploy:
       resources:
         limits:
