@@ -1,0 +1,84 @@
+services:
+  server:
+    image: redash/redash:26.3.0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "5501:5000"
+    container_name: redash-server
+    restart: unless-stopped
+    environment:
+      PYTHONUNBUFFERED: 1
+      REDASH_LOG_LEVEL: INFO
+      REDASH_REDIS_URL: redis://redis:6379/0
+      REDASH_DATABASE_URL: postgres://redash:redash@postgres:5432/redash
+      REDASH_COOKIE_SECRET: localdevsecret
+      REDASH_CELERY_WORKERS_COUNT: 1
+      REDASH_CELERY_WORKER_PREFETCH_MULTIPLIER: 1
+      REDASH_ADHOC_QUERY_TIME_LIMIT: 30
+    volumes:
+      - redash_init:/redash-init
+    command:
+      - /bin/bash
+      - -c
+      - |
+        if [ ! -f /redash-init/.initialized ]; then
+          /app/bin/docker-entrypoint create_db
+          touch /redash-init/.initialized
+        fi
+        exec /app/bin/docker-entrypoint server
+
+  postgres:
+    image: postgres:18-alpine
+    container_name: redash-postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U redash -d redash"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    environment:
+      - POSTGRES_USER=redash
+      - POSTGRES_DB=redash
+      - POSTGRES_PASSWORD=redash
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+    command:
+      - postgres
+      - -c
+      - shared_buffers=128MB
+      - -c
+      - work_mem=64MB
+      - -c
+      - maintenance_work_mem=64MB
+      - -c
+      - effective_cache_size=256MB
+      - -c
+      - max_connections=100
+
+  redis:
+    image: redis:8-alpine
+    container_name: redash-redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    command:
+      - redis-server
+      - --maxmemory
+      - 64mb
+      - --maxmemory-policy
+      - allkeys-lru
+    ports:
+      - "6479:6379"
+
+volumes:
+  redash_init:
+  postgres-data:
