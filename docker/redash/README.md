@@ -16,6 +16,7 @@ Docker Compose setup for local Redash development with an additional PostgreSQL 
 | redash-postgres | 6433 | PostgreSQL 18 (Redash db + scratch db) |
 | redash-redis | 6479 | Redis 8 |
 | redash-worker | - | RQ worker for background jobs |
+| redash-mcp | - | MCP Server for AI integration |
 
 ## Databases
 
@@ -105,3 +106,41 @@ docker compose exec redash-postgres psql -U redash -c "CREATE DATABASE scratch_d
 docker compose down -v
 docker compose up -d
 ```
+
+## Redash MCP Server (AI Integration)
+
+The `redash-mcp` service exposes a [Model Context Protocol](https://modelcontextprotocol.io/) server, allowing AI assistants to query Redash data sources.
+
+### Get API Key
+
+1. Visit http://localhost:5501 and log in
+2. Go to **Settings > API Key** and generate one
+3. Set the API key in `.env` file:
+   ```bash
+   REDASH_API_KEY=your_api_key_here
+   ```
+
+### Run with Claude Desktop
+
+Add to your `claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "redash": {
+      "command": "npx",
+      "args": ["-y", "@suthio/redash-mcp"],
+      "env": {
+        "REDASH_API_KEY": "your_api_key_here",
+        "REDASH_URL": "http://localhost:5501"
+      }
+    }
+  }
+}
+```
+
+### Available MCP Tools
+- `list-queries` / `get-query` — query management
+- `execute-query` / `execute-adhoc-query` — run queries
+- `list-data-sources` — list available data sources
+- `list-dashboards` / `get-dashboard` — dashboard management

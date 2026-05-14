@@ -113,6 +113,22 @@ services:
     ports:
       - "6479:6379"
 
+  # Redash MCP Server: AI integration via Model Context Protocol
+  redash-mcp:
+    image: node:18-alpine
+    container_name: redash-mcp
+    working_dir: /app
+    command: ["sh", "-c", "[ -d /usr/local/lib/node_modules/@suthio/redash-mcp ] || npm install -g @suthio/redash-mcp && redash-mcp"]
+    environment:
+      - REDASH_URL=http://server:5000
+      - REDASH_API_KEY=${REDASH_API_KEY:-}
+    volumes:
+      - redash-mcp-node_modules:/usr/local/lib/node_modules
+    restart: unless-stopped
+    ports:
+      - "63101:3100"
+
 volumes:
   redash_init:
   postgres-data:
+  redash-mcp-node_modules:
