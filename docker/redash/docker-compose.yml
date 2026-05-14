@@ -1,4 +1,5 @@
 services:
+  # Redash frontend + API server
   server:
     image: redash/redash:26.3.0
     depends_on:
@@ -31,6 +32,7 @@ services:
         fi
         exec /app/bin/docker-entrypoint server
 
+  # Redash background RQ worker: runs queries and scheduled jobs
   worker:
     image: redash/redash:26.3.0
     container_name: redash-worker
@@ -51,6 +53,7 @@ services:
       REDASH_ADHOC_QUERY_TIME_LIMIT: 30
     command: worker
 
+  # PostgreSQL 18: hosts both redash db and scratch_db for local data imports
   postgres:
     image: postgres:18-alpine
     container_name: redash-postgres
@@ -91,6 +94,7 @@ services:
         fi
         wait
 
+  # Redis 8: used by Redash for caching and RQ job queue
   redis:
     image: redis:8-alpine
     container_name: redash-redis
