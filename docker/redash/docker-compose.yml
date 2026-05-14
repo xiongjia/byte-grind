@@ -63,6 +63,8 @@ services:
       - POSTGRES_USER=redash
       - POSTGRES_PASSWORD=redash
       - POSTGRES_DB=redash
+      - SCRATCH_DB_USER=localdev
+      - SCRATCH_DB_PASSWORD=localdev123
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
@@ -81,8 +83,12 @@ services:
           pg_isready -U $${POSTGRES_USER} && break
           sleep 1
         done
-        psql -v ON_ERROR_STOP=1 -U $${POSTGRES_USER} -c "CREATE USER localdev WITH PASSWORD 'localdev123';" || true
-        psql -v ON_ERROR_STOP=1 -U $${POSTGRES_USER} -c "CREATE DATABASE scratch_db OWNER localdev;" || true
+        if ! psql -Atc "SELECT 1 FROM pg_roles WHERE rolname='$${SCRATCH_DB_USER}'" -U $${POSTGRES_USER}; then
+          psql -U $${POSTGRES_USER} -c "CREATE USER $${SCRATCH_DB_USER} WITH PASSWORD '$${SCRATCH_DB_PASSWORD}';"
+        fi
+        if ! psql -Atc "SELECT 1 FROM pg_database WHERE datname='scratch_db'" -U $${POSTGRES_USER}; then
+          psql -U $${POSTGRES_USER} -c "CREATE DATABASE scratch_db OWNER $${SCRATCH_DB_USER};"
+        fi
         wait
 
   redis:
