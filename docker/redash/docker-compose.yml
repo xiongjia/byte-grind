@@ -72,13 +72,17 @@ services:
       - bash
       - -c
       - |
+        sed -i "s|^#listen_addresses.*|listen_addresses = '*'|" /usr/local/share/postgresql.conf
+        sed -i "s|^listen_addresses.*|listen_addresses = '*'|" /usr/local/share/postgresql.conf
+        echo "host all all 0.0.0.0/0 md5" >> /usr/local/share/pg_hba.conf
+        echo "host all all ::0/0 md5" >> /usr/local/share/pg_hba.conf
         docker-entrypoint.sh postgres &
         for i in {1..30}; do
-          pg_isready -U postgres && break
+          pg_isready -U $${POSTGRES_USER} && break
           sleep 1
         done
-        psql -v ON_ERROR_STOP=1 --username postgres -c "CREATE USER localdev WITH PASSWORD 'localdev123';" || true
-        psql -v ON_ERROR_STOP=1 --username postgres -c "CREATE DATABASE scratch_db OWNER localdev;" || true
+        psql -v ON_ERROR_STOP=1 -U $${POSTGRES_USER} -c "CREATE USER localdev WITH PASSWORD 'localdev123';" || true
+        psql -v ON_ERROR_STOP=1 -U $${POSTGRES_USER} -c "CREATE DATABASE scratch_db OWNER localdev;" || true
         wait
 
   redis:
