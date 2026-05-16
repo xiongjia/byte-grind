@@ -3,9 +3,9 @@ services:
   server:
     image: redash/redash:26.3.0
     depends_on:
-      postgres:
+      redash-pg:
         condition: service_healthy
-      redis:
+      redash-redis:
         condition: service_healthy
     ports:
       - "5501:5000"
@@ -14,8 +14,8 @@ services:
     environment:
       PYTHONUNBUFFERED: 1
       REDASH_LOG_LEVEL: INFO
-      REDASH_REDIS_URL: redis://redis:6379/0
-      REDASH_DATABASE_URL: postgres://redash:redash@postgres:5432/redash
+      REDASH_REDIS_URL: redis://redash-redis:6379/0
+      REDASH_DATABASE_URL: postgres://redash:redash@redash-pg:5432/redash
       REDASH_COOKIE_SECRET: localdevsecret
       REDASH_CELERY_WORKERS_COUNT: 1
       REDASH_CELERY_WORKER_PREFETCH_MULTIPLIER: 1
@@ -37,16 +37,16 @@ services:
     image: redash/redash:26.3.0
     container_name: redash-worker
     depends_on:
-      postgres:
+      redash-pg:
         condition: service_healthy
-      redis:
+      redash-redis:
         condition: service_healthy
     restart: unless-stopped
     environment:
       PYTHONUNBUFFERED: 1
       REDASH_LOG_LEVEL: INFO
-      REDASH_REDIS_URL: redis://redis:6379/0
-      REDASH_DATABASE_URL: postgres://redash:redash@postgres:5432/redash
+      REDASH_REDIS_URL: redis://redash-redis:6379/0
+      REDASH_DATABASE_URL: postgres://redash:redash@redash-pg:5432/redash
       REDASH_COOKIE_SECRET: localdevsecret
       REDASH_CELERY_WORKERS_COUNT: 1
       REDASH_CELERY_WORKER_PREFETCH_MULTIPLIER: 1
@@ -54,7 +54,7 @@ services:
     command: worker
 
   # PostgreSQL 18: hosts both redash db and scratch_db for local data imports
-  postgres:
+  redash-pg:
     image: postgres:18-alpine
     container_name: redash-postgres
     healthcheck:
@@ -68,8 +68,9 @@ services:
       - POSTGRES_DB=redash
       - SCRATCH_DB_USER=localdev
       - SCRATCH_DB_PASSWORD=localdev123
+      - SCRATCH_DB_NAME=scratch_db
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     ports:
       - "6433:5432"
     restart: unless-stopped
@@ -81,7 +82,12 @@ services:
         sed -i "s|^listen_addresses.*|listen_addresses = '*'|" /usr/local/share/postgresql.conf
         echo "host all all 0.0.0.0/0 md5" >> /usr/local/share/pg_hba.conf
         echo "host all all ::0/0 md5" >> /usr/local/share/pg_hba.conf
-        docker-entrypoint.sh postgres &
+        docker-entrypoint.sh postgres \
+          -c shared_buffers=128MB \
+          -c work_mem=64MB \
+          -c maintenance_work_mem=64MB \
+          -c effective_cache_size=256MB \
+          -c max_connections=100 &
         for i in {1..30}; do
           pg_isready -U $${POSTGRES_USER} && break
           sleep 1
@@ -89,13 +95,13 @@ services:
         if ! psql -Atc "SELECT 1 FROM pg_roles WHERE rolname='$${SCRATCH_DB_USER}'" -U $${POSTGRES_USER}; then
           psql -U $${POSTGRES_USER} -c "CREATE USER $${SCRATCH_DB_USER} WITH PASSWORD '$${SCRATCH_DB_PASSWORD}';"
         fi
-        if ! psql -Atc "SELECT 1 FROM pg_database WHERE datname='scratch_db'" -U $${POSTGRES_USER}; then
-          psql -U $${POSTGRES_USER} -c "CREATE DATABASE scratch_db OWNER $${SCRATCH_DB_USER};"
+        if ! psql -Atc "SELECT 1 FROM pg_database WHERE datname='$${SCRATCH_DB_NAME}'" -U $${POSTGRES_USER}; then
+          psql -U $${POSTGRES_USER} -c "CREATE DATABASE $${SCRATCH_DB_NAME} OWNER $${SCRATCH_DB_USER};"
         fi
         wait
 
   # Redis 8: used by Redash for caching and RQ job queue
-  redis:
+  redash-redis:
     image: redis:8-alpine
     container_name: redash-redis
     healthcheck:
@@ -130,5 +136,5 @@ services:
 
 volumes:
   redash_init:
-  postgres-data:
+  pg-data:
   redash-mcp-node_modules:
